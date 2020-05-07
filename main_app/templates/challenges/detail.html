@@ -5,13 +5,36 @@
   <section>
     <p class="title"> code challenges • {{ challenge.title }} </p>
     <div class='show-post'>
+      <p>{{ challenge.date }}</p>
+
+      <!-- REPLIT -->
+      <iframe src="https://repl.it/@bartsw01/Fizz-Buzz-Python-Challenge?lite=true"
+        style="width:450px;height:450px;overflow:scroll;" id="MyFrame">
+      </iframe>
+      <select id="MySelectMenu">
+        <option value="https://repl.it/@bartsw01/Fizz-Buzz-Python-Challenge?lite=true">
+          Python Challenge
+        </option>
+        <option value="https://repl.it/@bartsw01/Fizz-Buzz-Python-Challenge-Solution?lite=true">
+          Python Solution
+        </option>
+      </select>
+      <button onClick="newSrc();">SEE SOLUTIONS</button>
+      
+      <script>
+        const  newSrc = () => {
+         let e = document.getElementById("MySelectMenu");
+         let newSrc = e.options[e.selectedIndex].value;
+         document.getElementById("MyFrame").src = newSrc;
+        }
+       </script>
+      <!-- REPLIT ENDS -->
+
       <div class="top-line">
         <span>{{ challenge.date }}</span>
         <span class='right'>
           <a class='links' href="">js solution</a>
           <a class='links' href="">py solution</a>
-          
-          
         </span>
       </div>
     </div>
@@ -23,40 +46,66 @@
   <div class="comment-container">
     <table class="striped" class="responsive-table">
       <thead>
-        <tr> 
+        <tr>
+          <th>Date</th>
+          <th>User</th>
+          <th>Comment</th>
+          <th>Delete</th>
+        <tr>
           <th class='tables'>Date</th>
           <th class='tables'>User</th>
-          <th class='tables'>Comment</th>         
+          <th class='tables'>Comment</th>
           <th class='tables'>Delete</th>
         </tr>
       </thead>
       <tbody>
         {% for challengecomment in challenge.challengecomment_set.all %}
-          <tr>
-            <td class='tables'>{{ challengecomment.created_at }}</td>
-            <td class='tables'>{{ challengecomment.user }}</td>
-            <td class='tables'>{{ challengecomment.content }}</td>          
+
+        <tr>
+          <td>{{ challengecomment.created_at }}</td>
+          <td>{{ challengecomment.user }}</td>
+          <td>{{ challengecomment.content }}</td>
           {% if user == challengecomment.user %}
-            <td class='tables'><a href="{% url 'challenge_delete_comment' challengecomment.id %}">x</a></td>         
+          <td><a href="{% url 'challenge_delete_comment' challengecomment.id %}">x</a></td>
           {% else %}
-            <td></td>
+          <td></td>
           {% endif %}
-          </tr>
+        </tr>
+
+        <tr>
+          <td class='tables'>{{ challengecomment.created_at }}</td>
+          <td class='tables'>{{ challengecomment.user }}</td>
+          <td class='tables'>{{ challengecomment.content }}</td>
+          {% if user == challengecomment.user %}
+          <td class='tables'><a href="{% url 'challenge_delete_comment' challengecomment.id %}">x</a></td>
+          {% else %}
+          <td></td>
+          {% endif %}
+        </tr>
         {% endfor%}
       </tbody>
     </table>
   </div>
   {% endif %}
 
-   <!-- COMMENTS FORM -->
-   <div class='comment-form'>
+  <!-- COMMENTS FORM -->
+  <div class="col s12 l6">
     <form action="{% url 'challenge_add_comment' challenge.id %}" method="post">
       {% csrf_token %}
       {{ challenge_comment_form.as_p }}
-      <button class="btn" type="submit" value="add comment" name="action">
-        add comment        
-      </button>
-    </form>
+      <button class="btn waves-effect waves-light cyan lighten-1" type="submit" value="add comment" name="action">
+        add comment
+
+        <!-- COMMENTS FORM -->
+        <div class='comment-form'>
+          <form action="{% url 'challenge_add_comment' challenge.id %}" method="post">
+            {% csrf_token %}
+            {{ challenge_comment_form.as_p }}
+            <button class="btn" type="submit" value="add comment" name="action">
+              add comment
+
+            </button>
+          </form>
+        </div>
   </div>
-</div>
-{% endblock %}
+  {% endblock %}
